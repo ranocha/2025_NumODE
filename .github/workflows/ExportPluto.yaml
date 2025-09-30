@@ -1,0 +1,87 @@
+name: Export Pluto notebooks
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+# When two jobs run in parallel, cancel the older ones,
+# to make sure that the website is generated from the most
+# recent commit.
+concurrency:
+    group: pluto-export
+    cancel-in-progress: true
+
+# This action needs permission to write the exported HTML file
+# to the gh-pages branch.
+permissions:
+    contents: write
+    # (all other permission fields default to "none")
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout this repository
+              uses: actions/checkout@v4
+
+            # With default settings, we get
+            #   ERROR: The following 1 direct dependency failed to precompile:
+            #   GLMakie [e9467ef8-e4e7-5192-8a1a-b1aee30e663a]
+            #   Failed to precompile GLMakie [e9467ef8-e4e7-5192-8a1a-b1aee30e663a] to "/home/runner/.julia/compiled/v1.10/GLMakie/jl_WhmHS9".
+            #   ┌ Warning:     OpenGL/GLFW wasn't loaded correctly or couldn't be initialized.
+            #   │     This likely means, you're on a headless server without having OpenGL support setup correctly.
+            #   │     Have a look at the troubleshooting section in the readme:
+            #   │     https://github.com/MakieOrg/Makie.jl/tree/master/GLMakie#troubleshooting-opengl.
+            #   └ @ GLMakie ~/.julia/packages/GLMakie/TH3rf/src/gl_backend.jl:4
+            #   ERROR: LoadError: InitError: Exception[GLFW.GLFWError(65550, "X11: The DISPLAY environment variable is missing"), ErrorException("glfwInit failed")]
+            # with GLMakie.jl used in some Pluto.jl notebooks.
+            - name: Install GLMakie dependencies
+              run: sudo apt-get update && sudo apt-get install -y xorg-dev mesa-utils xvfb libgl1 freeglut3-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev xsettingsd x11-xserver-utils
+
+            - name: Install Julia
+              uses: julia-actions/setup-julia@v2
+              with:
+                  version: "1.10"
+
+            - name: Cache Julia artifacts & such
+              uses: julia-actions/cache@v2
+              with:
+                cache-registries: "true"
+
+            # We set up a folder that Pluto can use to cache
+            # exported notebooks. If the notebook file did not
+            # change, then Pluto can take the exported file
+            # from cache instead of running the notebook.
+            - name: Set up notebook state cache
+              uses: actions/cache@v4
+              with:
+                  path: pluto_state_cache
+                  key: ${{ runner.os }}-pluto_state_cache-v2-${{ hashFiles('**/Project.toml', '**/Manifest.toml', '.github/workflows/*' ) }}-${{ hashFiles('**/*jl') }}
+                  restore-keys: |
+                      ${{ runner.os }}-pluto_state_cache-v2-${{ hashFiles('**/Project.toml', '**/Manifest.toml', '.github/workflows/*' ) }}
+
+            - name: Run & export Pluto notebooks
+              run: |
+                DISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24' julia -e 'using Pkg
+                  Pkg.activate(mktempdir())
+                  Pkg.add([
+                    Pkg.PackageSpec(name="PlutoSliderServer", version="0.3.2-0.3"),
+                  ])
+
+                  import PlutoSliderServer
+
+                  PlutoSliderServer.github_action(".";
+                    Export_cache_dir="pluto_state_cache",
+                    Export_baked_notebookfile=false,
+                    Export_baked_state=false,
+                    # more parameters can go here
+                  )'
+
+            - name: Deploy to gh-pages
+              uses: JamesIves/github-pages-deploy-action@releases/v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  branch: gh-pages
+                  folder: .
+                  single-commit: true
