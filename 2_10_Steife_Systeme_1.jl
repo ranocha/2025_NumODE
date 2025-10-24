@@ -148,6 +148,14 @@ space
 # ╔═╡ 9ab16dd6-79c8-4da8-81bd-5d1a86d2d1e8
 space
 
+# ╔═╡ 6d831757-2a24-45fb-913f-46da544af944
+md"""
+#### Installing packages
+
+_First, we will install (and compile) some packages. This can take a few minutes when  running this notebook for the first time._
+"""
+
+
 # ╔═╡ 94bad6f5-827d-4b94-a47a-be9552b2e3bf
 function linear1!(du, u, parameters, t)
 	u1, u2 = u
@@ -2849,6 +2857,7 @@ version = "4.1.0+0"
 # ╟─9ab16dd6-79c8-4da8-81bd-5d1a86d2d1e8
 # ╟─0e010d6c-6eeb-4bd4-a3d1-b05e4e6b41bf
 # ╠═287cd4de-9258-4ce1-9439-53c70f20b18b
+# ╟─6d831757-2a24-45fb-913f-46da544af944
 # ╠═ab7f25a2-9e77-4112-9837-c510dffe3ddf
 # ╠═a6e60aa0-40db-4056-9a7f-d605862d0578
 # ╠═3e45188a-22c9-4927-93c7-42abee3e1ea0

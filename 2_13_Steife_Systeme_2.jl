@@ -103,6 +103,14 @@ space
 # ╔═╡ 9ab16dd6-79c8-4da8-81bd-5d1a86d2d1e8
 space
 
+# ╔═╡ b4c0dde9-efdd-4b58-ad83-02db92ec7e62
+md"""
+#### Installing packages
+
+_First, we will install (and compile) some packages. This can take a few minutes when  running this notebook for the first time._
+"""
+
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -2701,6 +2709,7 @@ version = "4.1.0+0"
 # ╟─9ab16dd6-79c8-4da8-81bd-5d1a86d2d1e8
 # ╟─0e010d6c-6eeb-4bd4-a3d1-b05e4e6b41bf
 # ╠═287cd4de-9258-4ce1-9439-53c70f20b18b
+# ╟─b4c0dde9-efdd-4b58-ad83-02db92ec7e62
 # ╠═0dfd6090-3663-466d-a70a-385b09d3e63e
 # ╠═c9af0bc4-4731-41eb-9b80-9ab9d1d5fc6e
 # ╠═b26d6ff5-502e-4901-9d6e-36eedab10b3c
