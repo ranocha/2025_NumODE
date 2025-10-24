@@ -4,14 +4,13 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 22b5d428-82cc-11ee-253f-6785bc27e96c
-using PythonCall
-
 # ╔═╡ 3c8a0907-a0e8-4c42-8779-44ecdc5e95e3
 begin
 	using CondaPkg
 	# Fix for https://github.com/JuliaPy/PythonCall.jl/issues/694
-	CondaPkg.add("python", version="3.13.*")
+	CondaPkg.add("python", version = "3.13.*")
+	CondaPkg.add_pip("nodepy")
+	using PythonCall
 end
 
 # ╔═╡ e49d77fe-3304-470b-9f57-2f5f7d3c1fcd
@@ -30,9 +29,6 @@ md"""
 
 _When running this notebook for the first time, this could take up several minutes. Hang in there!_
 """
-
-# ╔═╡ 689f5617-026b-4775-acab-dc715cc79901
-CondaPkg.add_pip("nodepy")
 
 # ╔═╡ 7aa3f05e-0c36-48a6-bbcb-43718f7b78cf
 md"""
@@ -380,9 +376,7 @@ version = "0.41.3+0"
 # ╔═╡ Cell order:
 # ╟─e49d77fe-3304-470b-9f57-2f5f7d3c1fcd
 # ╟─cd6fb615-c8e4-4598-b6d1-7b2d9734996a
-# ╠═22b5d428-82cc-11ee-253f-6785bc27e96c
 # ╠═3c8a0907-a0e8-4c42-8779-44ecdc5e95e3
-# ╠═689f5617-026b-4775-acab-dc715cc79901
 # ╟─7aa3f05e-0c36-48a6-bbcb-43718f7b78cf
 # ╠═53d9a94d-58f8-4fb8-a0e6-a0def2766a82
 # ╠═161a2943-86db-4ef9-802b-92b1b29c8fa9
