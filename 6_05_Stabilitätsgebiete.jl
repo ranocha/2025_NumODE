@@ -4,80 +4,137 @@
 using Markdown
 using InteractiveUtils
 
-# ╔═╡ 22b5d428-82cc-11ee-253f-6785bc27e96c
-using PythonCall
-
-# ╔═╡ 3c8a0907-a0e8-4c42-8779-44ecdc5e95e3
+# ╔═╡ 8af91fe7-35d0-4137-b6e8-ccc65820e34c
 begin
 	using CondaPkg
 	# Fix for https://github.com/JuliaPy/PythonCall.jl/issues/694
 	CondaPkg.add("python", version="3.13.*")
 end
 
-# ╔═╡ e49d77fe-3304-470b-9f57-2f5f7d3c1fcd
+# ╔═╡ 5bc264a0-4d48-4075-99ba-1b3c22c57d9c
+using PythonCall
+
+# ╔═╡ 6f62c017-3229-445d-9c49-84d41a0075d9
 md"""
-# 2.11 Schrittweitenkontrolle 2 und lineare Stabilitätstheorie
-
-Hier werden einige Stabilitätsregionen von Runge-Kutta-Verfahren sowie
-Beispiele zur Schrittweitenkontrollstabilität vorgestellt.
-
-Dabei verwenden wir das Python-Paket [`nodepy`](https://github.com/ketch/nodepy).
+# Stabilitätsgebiete einiger linearer Mehrschittverfahren
 """
 
-# ╔═╡ cd6fb615-c8e4-4598-b6d1-7b2d9734996a
+# ╔═╡ 53110012-b46e-11ee-2409-45e8930b35d1
 md"""
-#### Initializing packages
+#### Installing packages
 
-_When running this notebook for the first time, this could take up several minutes. Hang in there!_
+_First, we will install (and compile) some packages. This can take a few minutes when  running this notebook for the first time._
 """
 
-# ╔═╡ 689f5617-026b-4775-acab-dc715cc79901
+
+# ╔═╡ 0637f3cf-0783-4a31-a941-8be48712a9a1
 CondaPkg.add_pip("nodepy")
 
-# ╔═╡ 7aa3f05e-0c36-48a6-bbcb-43718f7b78cf
-md"""
-## Stabilitätsgebiet expliziter Runge-Kutta-Verfahren
+# ╔═╡ 175f810b-7c46-44bb-ba6e-8c2ee84eeb57
+nodepy = pyimport("nodepy")
 
-Die Stabilitätsregion des Hauptverfahrens ist rot, der Rand der Stabilitätsregion eines eingebetteten Verfahrens ist schwarz.
+# ╔═╡ 3710eeb9-4a02-49cf-90b8-2ece862473e0
+matplotlib = pyimport("matplotlib")
+
+# ╔═╡ 29980c4a-85ed-4ba7-8848-ce591ac9936a
+md"""
+## Adams-Bashforth-Verfahren
+
+Das Stabilitätsgebiet ist rot dargestellt, die Wurzelortskurve als schwarze Linie.
 """
 
-# ╔═╡ 53d9a94d-58f8-4fb8-a0e6-a0def2766a82
-nodepy = pyimport("nodepy");
-
-# ╔═╡ 161a2943-86db-4ef9-802b-92b1b29c8fa9
-matplotlib = pyimport("matplotlib");
-
-# ╔═╡ 4f400bcc-a138-4b42-ae30-c8886d45db5d
+# ╔═╡ 1c702839-4896-4064-8924-148a30e96060
 let
-	# DP5, RK44, BE = impl. Euler, FE = expl. Euler, Heun22, ...
-	erk = nodepy.rk.loadRKM("DP5")
-	matplotlib.pyplot.close("all")
-	erk.plot_stability_region()
+	lmm = nodepy.lm.Adams_Bashforth(2)
+	lmm.plot_stability_region()
 end
 
-# ╔═╡ 791b845b-7e4d-4201-814d-de16dc17e73e
-md"""## Schrittweiten-Kontroll-Stabilität: I-Regler"""
-
-# ╔═╡ 0440f4f7-ac4b-40e4-a469-282ad7ad3fa6
+# ╔═╡ a4759a60-59aa-449e-8b1a-7710e02866a1
 let
-	# DP5, Tsit5, BS5, BS3, ...
-	erk = nodepy.rk.loadRKM("DP5")
-	matplotlib.pyplot.close("all")
-	fig1, fig2 = erk.plot_I_controller_stability()
-	fig2
+	lmm = nodepy.lm.Adams_Bashforth(3)
+	lmm.plot_stability_region()
 end
 
-# ╔═╡ bfcb73b8-733d-4e0f-b230-4636480ff7db
-md"""## Schrittweiten-Kontroll-Stabilität: PID-Regler"""
-
-# ╔═╡ 17759085-0f24-4361-8c0f-06e0592d2666
+# ╔═╡ 95d3d58d-7e2b-423d-8940-15e6aa366156
 let
-	# DP5, Tsit5, BS5, BS3, ...
-	erk = nodepy.rk.loadRKM("DP5")
-	matplotlib.pyplot.close("all")
-	fig1, fig2 = erk.plot_PID_controller_stability(
-		beta1 = 0.70, beta2 = -0.40, beta3 = 0.00)
-	fig2
+	lmm = nodepy.lm.Adams_Bashforth(4)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ abb42455-f739-48b5-864e-2cebf21de013
+let
+	lmm = nodepy.lm.Adams_Bashforth(5)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ 63421c8c-d780-4513-8a23-94b274090d9f
+md"""
+## Adams-Moulton-Verfahren
+"""
+
+# ╔═╡ 01a2ebfa-7eba-4563-b838-a607d48ef40f
+let
+	lmm = nodepy.lm.Adams_Moulton(2)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ f21e0372-c053-444b-ae9a-a50bbc8dba44
+let
+	lmm = nodepy.lm.Adams_Moulton(3)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ c8cc6736-35f1-4085-91e1-a984379b8973
+let
+	lmm = nodepy.lm.Adams_Moulton(4)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ 5d0f38f9-7ee1-43e7-80e4-1e759549f56c
+md"""
+## BDF-Verfahren
+"""
+
+# ╔═╡ 5e603e26-53b2-4606-9456-a04fe480f168
+let
+	lmm = nodepy.lm.backward_difference_formula(1)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ 68c1ff01-1b6f-487e-901b-9350377084c2
+let
+	lmm = nodepy.lm.backward_difference_formula(2)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ 78a29ce4-6390-4c5a-86a1-922f27687876
+let
+	lmm = nodepy.lm.backward_difference_formula(3)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ 8eb666fb-7269-47b8-8fae-3c0224ec546b
+let
+	lmm = nodepy.lm.backward_difference_formula(4)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ d3b2d3d4-fde0-4be7-8c74-77b7aaf5359e
+let
+	lmm = nodepy.lm.backward_difference_formula(5)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ 3d93d5e2-ea0e-460d-b569-6e5029bf6abf
+let
+	lmm = nodepy.lm.backward_difference_formula(6)
+	lmm.plot_stability_region()
+end
+
+# ╔═╡ 02008813-66a3-485b-af79-8e73b2a430a4
+let
+	lmm = nodepy.lm.backward_difference_formula(7)
+	lmm.plot_stability_region()
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -378,18 +435,29 @@ version = "0.41.3+0"
 """
 
 # ╔═╡ Cell order:
-# ╟─e49d77fe-3304-470b-9f57-2f5f7d3c1fcd
-# ╟─cd6fb615-c8e4-4598-b6d1-7b2d9734996a
-# ╠═22b5d428-82cc-11ee-253f-6785bc27e96c
-# ╠═3c8a0907-a0e8-4c42-8779-44ecdc5e95e3
-# ╠═689f5617-026b-4775-acab-dc715cc79901
-# ╟─7aa3f05e-0c36-48a6-bbcb-43718f7b78cf
-# ╠═53d9a94d-58f8-4fb8-a0e6-a0def2766a82
-# ╠═161a2943-86db-4ef9-802b-92b1b29c8fa9
-# ╠═4f400bcc-a138-4b42-ae30-c8886d45db5d
-# ╟─791b845b-7e4d-4201-814d-de16dc17e73e
-# ╠═0440f4f7-ac4b-40e4-a469-282ad7ad3fa6
-# ╟─bfcb73b8-733d-4e0f-b230-4636480ff7db
-# ╠═17759085-0f24-4361-8c0f-06e0592d2666
+# ╟─6f62c017-3229-445d-9c49-84d41a0075d9
+# ╟─53110012-b46e-11ee-2409-45e8930b35d1
+# ╠═8af91fe7-35d0-4137-b6e8-ccc65820e34c
+# ╠═5bc264a0-4d48-4075-99ba-1b3c22c57d9c
+# ╠═0637f3cf-0783-4a31-a941-8be48712a9a1
+# ╠═175f810b-7c46-44bb-ba6e-8c2ee84eeb57
+# ╠═3710eeb9-4a02-49cf-90b8-2ece862473e0
+# ╟─29980c4a-85ed-4ba7-8848-ce591ac9936a
+# ╠═1c702839-4896-4064-8924-148a30e96060
+# ╠═a4759a60-59aa-449e-8b1a-7710e02866a1
+# ╠═95d3d58d-7e2b-423d-8940-15e6aa366156
+# ╠═abb42455-f739-48b5-864e-2cebf21de013
+# ╟─63421c8c-d780-4513-8a23-94b274090d9f
+# ╠═01a2ebfa-7eba-4563-b838-a607d48ef40f
+# ╠═f21e0372-c053-444b-ae9a-a50bbc8dba44
+# ╠═c8cc6736-35f1-4085-91e1-a984379b8973
+# ╟─5d0f38f9-7ee1-43e7-80e4-1e759549f56c
+# ╠═5e603e26-53b2-4606-9456-a04fe480f168
+# ╠═68c1ff01-1b6f-487e-901b-9350377084c2
+# ╠═78a29ce4-6390-4c5a-86a1-922f27687876
+# ╠═8eb666fb-7269-47b8-8fae-3c0224ec546b
+# ╠═d3b2d3d4-fde0-4be7-8c74-77b7aaf5359e
+# ╠═3d93d5e2-ea0e-460d-b569-6e5029bf6abf
+# ╠═02008813-66a3-485b-af79-8e73b2a430a4
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
