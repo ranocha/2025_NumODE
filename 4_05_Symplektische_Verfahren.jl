@@ -401,6 +401,14 @@ space
 # ╔═╡ 31d56288-1e51-42c1-b4e3-75b26dbd0e7a
 space
 
+# ╔═╡ b29b651c-d2a6-47e9-97dd-c6cc60deed95
+md"""
+#### Installing packages
+
+_First, we will install (and compile) some packages. This can take a few minutes when  running this notebook for the first time._
+"""
+
+
 # ╔═╡ a7271aca-d223-4988-8f59-d2b5dcf9dc9b
 function initial_circle(s)
 	r = 0.25
@@ -3034,6 +3042,7 @@ version = "1.9.2+0"
 # ╟─31d56288-1e51-42c1-b4e3-75b26dbd0e7a
 # ╟─af29fec4-20fd-4a8e-88c4-401416223d1f
 # ╠═858ef905-71b4-445b-928d-e52d8a9fe445
+# ╟─b29b651c-d2a6-47e9-97dd-c6cc60deed95
 # ╠═8dd37db6-5b96-4393-bfe3-f9de5c860e88
 # ╠═85d1753a-88ca-4d93-ba59-da6a33f3285d
 # ╠═4c8a7cd3-6831-4d70-aead-f16f74ccec04
