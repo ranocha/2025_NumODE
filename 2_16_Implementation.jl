@@ -43,7 +43,7 @@ using LaTeXStrings
 md"""
 # 2.16 Implementationshinweise
 
-Hier betrachten wir zwei verschiedene Implementierungen von DIRK-Verfahren für linear ODEs
+Hier betrachten wir zwei verschiedene Implementierungen von DIRK-Verfahren für lineare ODEs
 
 $$u'(t) = L u(t).$$
 
@@ -1888,7 +1888,7 @@ uuid = "8e850ede-7688-5339-a07c-302acd2aaf8d"
 version = "1.52.0+1"
 
 [[deps.oneTBB_jll]]
-deps = ["Artifacts", "JLLWrappers", "Libdl"]
+deps = ["Artifacts", "JLLWrappers", "LazyArtifacts", "Libdl"]
 git-tree-sha1 = "d5a767a3bb77135a99e433afe0eb14cd7f6914c3"
 uuid = "1317d2d5-d96f-522e-a858-c73665f53c3e"
 version = "2022.0.0+0"
